@@ -16,5 +16,13 @@ EOT
       type = string
     })))
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.group_owners : (
+        v.owner == null || alltrue([for item in v.owner : (contains(["GROUP", "USER"], item.type))])
+      )
+    ])
+    error_message = "must be one of: \"GROUP\", \"USER\""
+  }
 }
 
